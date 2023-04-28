@@ -1,0 +1,111 @@
+@import 'bootstrap/scss/functions';
+@import 'bootstrap/scss/variables';
+@import 'bootstrap/scss/mixins';
+@import 'shared/styles/_variables.scss';
+
+.conversejs {
+    .chatbox {
+        .bottom-panel {
+            .chat-content-sendbutton {
+                height: calc(
+                    100% - (var(--chat-textarea-height) + var(--send-button-height) + 2 * var(--send-button-margin))
+                );
+            }
+            .textarea-container-custom {
+                display: flex;
+                justify-content: space-between;
+                align-items: top;
+                background: #fff;
+                .btn-container-custom {
+                    padding: 0.6rem 1rem 1rem 0;
+                    .send-button-custome {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        width: 40px !important;
+                        height: 40px !important;
+                        border-radius: 50%;
+                        cursor: pointer;
+                        transition: all 0.3s ease;
+                        &:hover {
+                            opacity: 0.8;
+                        }
+                        converse-icon {
+                            line-height: 0;
+                            margin: 0 0 1px;
+                        }
+                    }
+                }
+            }
+
+            .sendXMPPMessage {
+                -moz-background-clip: padding;
+                -webkit-background-clip: padding-box;
+                border-bottom-radius: var(--chatbox-border-radius);
+                background-clip: padding-box;
+                background-color: var(--chat-textarea-background-color);
+                border: 0;
+                margin: 0;
+                padding: 0.6rem 1rem 1rem;
+                width: 100%;
+                @media screen and (max-height: $mobile-landscape-height) {
+                    width: 100%;
+                }
+                @media screen and (max-width: $mobile-portrait-length) {
+                    width: 100%;
+                }
+
+                .suggestion-box__results {
+                    &:after {
+                        display: none;
+                    }
+                }
+
+                .spoiler-hint {
+                    width: 100%;
+                    color: var(--foreground);
+                    background-color: var(--background);
+                    border: none;
+                    border-bottom: 1px solid #d9d9d9;
+                }
+
+                .chat-textarea,
+                input {
+                    &:active,
+                    &:focus {
+                        outline-color: var(--chat-head-color);
+                    }
+                    &.correcting {
+                        background-color: var(--chat-correcting-color);
+                    }
+                }
+
+                .chat-textarea {
+                    color: var(--chat-textarea-color);
+                    background-color: var(--chat-textarea-background-color);
+                    border-top-left-radius: 0;
+                    border-top-right-radius: 0;
+                    border-bottom-radius: var(--chatbox-border-radius);
+                    padding-left: 1em;
+                    padding-right: 1em;
+                    padding-top: 0.5em;
+                    padding-bottom: 0.5em;
+                    width: 100%;
+                    border: none;
+                    // min-height: var(--chat-textarea-height);
+                    margin-bottom: -4px; // Not clear why this is necessar :(
+                    resize: none;
+                    &.spoiler {
+                        height: 42px;
+                    }
+                    border-radius: 42px;
+                    border: 1px solid #d9d9d9;
+                    height: 42px !important;
+                    &:placeholder-shown {
+                        line-height: 26px;
+                    }
+                }
+            }
+        }
+    }
+}

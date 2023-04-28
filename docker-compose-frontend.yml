@@ -1,0 +1,151 @@
+version: '3.8'
+
+services:
+  lec-chatserver:
+    image: narutosimaha/lec-chatserver
+    user: "ejabberd:"
+    # command: ["/bin/sh", "-c", "/home/ejabberd/conf/script.sh"]
+    environment: 
+      - JWT_KEY=secret
+      - DB_TYPE=pgsql
+      - DB_SERVER=langchat-db
+      - DB_PORT=5432
+      - DB_NAME=langchat
+      - DB_USER=langteam
+      - DB_PASSWORD=Aa1234
+      - EJABBERD_HOST=localhost
+    ports:
+      - "5222:5222"
+      - "5269:5269"
+      - "5280:5280"
+      - "5281:443"
+    # volumes:
+    #   - ./lec-chatserver/ejabberd-dev.yml:/home/ejabberd/conf/ejabberd.yml:ro
+    #   - ./lec-chatserver/certificates/:/home/ejabberd/conf/certificates
+    #   # - ./lec-chatserver/auth_script/main.py:/home/ejabberd/conf/auth_script/main.py
+    #   - ./lec-chatserver/logs/:/home/ejabberd/logs/
+    #   - ./lec-chatserver/env.yml:/home/ejabberd/conf/env.yml
+    depends_on:
+      langchat-db:
+        condition: service_healthy
+
+  langchat-db:
+    image: postgres:15.2
+    environment:
+      - POSTGRES_DB=langchat
+      - POSTGRES_USER=langteam
+      - POSTGRES_PASSWORD=Aa1234
+    ports:
+      - 5433:5432
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: always
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-q", "-d", "langchat", "-U", "langteam" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  langchat-flyway:
+    image: narutosimaha/flyway-langchat
+    # command: -url=jdbc:postgresql://postgres:5432/ejabberd -user=ejabberd -password=ejabberd_password -connectRetries=60 migrate
+    environment:
+      - DATABASE_NAME=langchat
+      - DATABASE_URL=jdbc:postgresql://langchat-db:5432
+      - POSTGRES_USER=langteam
+      - POSTGRES_PASSWORD=Aa1234
+    # volumes:
+    #   - ./lec-db/langchat/sql:/flyway/sql
+    depends_on:
+      - langchat-db
+    
+  langgeneral-db:
+    image: postgres:15.2
+    environment:
+      - POSTGRES_DB=langgeneral
+      - POSTGRES_USER=langteam
+      - POSTGRES_PASSWORD=Aa1234
+    ports:
+      - 5434:5432
+    volumes:
+      - pgdata1:/var/lib/postgresql/data
+    restart: always
+
+      
+  langgeneral-flyway:
+    image: narutosimaha/flyway-langgeneral
+    # command: -url=jdbc:postgresql://postgres:5432/ejabberd -user=ejabberd -password=ejabberd_password -connectRetries=60 migrate
+    environment:
+      - DATABASE_NAME=langgeneral
+      - DATABASE_URL=jdbc:postgresql://langgeneral-db:5432
+      - POSTGRES_USER=langteam
+      - POSTGRES_PASSWORD=Aa1234
+    # volumes:
+    #   - ./lec-db/langchat/sql:/flyway/sql
+    depends_on:
+      - langgeneral-db
+
+  lec-web:
+    image: narutosimaha/lec-web
+    # command: ["/bin/sh", "-c", "nginx-debug -g 'daemon off;'"]
+    command: nginx-debug -g 'daemon off;'
+    container_name: lec-web
+    environment: 
+      - NGINX_HOST=localhost
+      - CHAT_WS_ENDPOINT=xmpp
+      - CHAT_PORT=80
+      - CHAT_HOST=lec-chathelper
+      - CHAT_ENDPOINT=app
+      - CHAT_SERVER_ENDPOINT=chat/xmpp/ws
+    ports:
+      - "80:80"
+      - "443:443"
+
+
+  lec-chathelper:
+    image: narutosimaha/lec-chathelper
+    command: /bin/sh -c "httpd -D FOREGROUND"
+    environment: 
+      - CREDENTIALS_KEY=secret
+      - HOST=localhost
+      - LANGGENERAL_DB_HOST=langgeneral-db
+      - LANGGENERAL_PASS=Aa1234
+      - LANGGENERAL_DB=langgeneral
+      - LANGGENERAL_USER=langteam
+      - LANGGENERAL_PORT=5432
+      - LANGCHAT_DB=langchat
+      - LANGCHAT_DB_HOST=langchat-db
+      - LANGCHAT_PASS=Aa1234
+      - LANGCHAT_USER=langteam
+      - LANGCHAT_PORT=5432
+      - TZ=Asia/Ho_Chi_Minh
+      - TOKEN_DB_KEY=BCulJ35SlqRnAuxt
+      - IV=EF3XDDnCjMpTJ8Pc
+      - DJANGO_SECRET_KEY=Ref22pTceiaGogZFA732HXR4xPdtDtKmPs6hzXkNCa4mjWgYzx
+      - OLD_SECRET_KEY=Ref22pTceiaGogZFA732HXR4xPdtDtKmPs6hzXkNCa4mjWgYzx
+      - LANGCHAT_HOST=localhost
+      - S3_ACCESS_KEY=AKIA5RKKGIJLRSD5GHDX
+      - S3_SECRET_KEY=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
+      - S3_BUCKET=language-exchanged
+      - XMPP_UPLOAD_KEY=YOqe6JUVReE/iBJPDgSe25JYjD6vnz7b1Y7cRwRB
+      - WEB_SERVER_HOST=lec-chathelper
+      - APP_BROKERS=kafka:9092
+      - CELERY_RESULT_BACKEND=redis://celery-broker:6379/0
+      - CELERY_BROKER_URL=redis://celery-broker:6379/1
+      - XMPP_WS_PORT=5280
+      - XMPP_WS_HOST=lec-chatserver
+      - LOG_FILE=/usr/local/src/lec_chathelper/chat/chatworker/logs/worker.log
+    ports:
+      - "8082:443"
+      # - "443:443"
+    volumes:
+      - ./conf/hello.conf:/usr/local/apache2/conf/httpd.conf:ro
+      - ./lec_chathelper:/usr/local/src/lec_chathelper
+      - ./lec_chathelper/chat/chatworker/conf/celeryd.default:/etc/default/celeryd
+      - ./lec_chathelper/chat/chatworker/conf/celeryd.init:/etc/init.d/celeryd
+      # - ./public-html/:/usr/local/apache2/htdocs/
+      - ./logs:/usr/local/apache2/logs
+
+volumes:
+  pgdata:
+  pgdata1:

@@ -1,0 +1,16 @@
+[
+  {
+    "user": "hello@localhost",
+    "nickname": "Vu Tran"
+  },
+  {
+    "user": "vutl",
+    "jid": "thuongnguyen@localhost",
+    "nickname": "Thuong khung"
+  },
+  {
+    "user": "nene",
+    "jid": "thuongnguyen@localhost",
+    "nickname": "Thuong khung"
+  }
+]

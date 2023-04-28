@@ -1,0 +1,144 @@
+version: '3.8'
+
+services:  
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.3.2
+    # container_name: zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+
+
+  # Topics
+  #   1. Personal info update.
+  #   2. Friend relationship update: friend and unfriend.
+  kafka:
+    image: confluentinc/cp-kafka:7.3.2
+    container_name: broker
+    ports:
+    # To learn about configuring Kafka for access across networks see
+    # https://www.confluent.io/blog/kafka-client-cannot-connect-to-broker-on-aws-on-docker-etc/
+      - "9092:9092"
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_INTERNAL:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092,PLAINTEXT_INTERNAL://broker:29092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+  
+  init-kafka:
+    image: confluentinc/cp-kafka:7.3.2
+    depends_on:
+      - kafka
+    entrypoint: [ '/bin/sh', '-c' ]
+    command: |
+      "
+      # blocks until kafka is reachable
+      kafka-topics --bootstrap-server broker:29092 --list
+
+      echo -e 'Creating kafka topics'
+      kafka-topics --bootstrap-server broker:29092 --create --if-not-exists --topic chathelper-friendstate --replication-factor 1 --partitions 1
+      kafka-topics --bootstrap-server broker:29092 --create --if-not-exists --topic chathelper-userupdate --replication-factor 1 --partitions 1
+
+      echo -e 'Successfully created the following topics:'
+      kafka-topics --bootstrap-server broker:29092 --list
+      "
+  task-queue:
+    image: redis
+    container_name: celery_broker
+    ports:
+      - "6379:6379"
+  
+  lec-chatserver:
+    image: narutosimaha/lec-chatserver
+    user: "ejabberd:"
+    # command: ["/bin/sh", "-c", "/home/ejabberd/conf/script.sh"]
+    environment: 
+      - JWT_KEY=secret
+      - DB_TYPE=pgsql
+      - DB_SERVER=langchat-db
+      - DB_PORT=5432
+      - DB_NAME=langchat
+      - DB_USER=langteam
+      - DB_PASSWORD=Aa1234
+      - EJABBERD_HOST=localhost
+    ports:
+      - "5222:5222"
+      - "5269:5269"
+      - "5280:5280"
+      - "5281:443"
+    # volumes:
+    #   - ./lec-chatserver/ejabberd-dev.yml:/home/ejabberd/conf/ejabberd.yml:ro
+    #   - ./lec-chatserver/certificates/:/home/ejabberd/conf/certificates
+    #   # - ./lec-chatserver/auth_script/main.py:/home/ejabberd/conf/auth_script/main.py
+    #   - ./lec-chatserver/logs/:/home/ejabberd/logs/
+    #   - ./lec-chatserver/env.yml:/home/ejabberd/conf/env.yml
+    depends_on:
+      langchat-db:
+        condition: service_healthy
+
+  langchat-db:
+    image: postgres:15.2
+    environment:
+      - POSTGRES_DB=langchat
+      - POSTGRES_USER=langteam
+      - POSTGRES_PASSWORD=Aa1234
+    ports:
+      - 5433:5432
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: always
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-q", "-d", "langchat", "-U", "langteam" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  langchat-flyway:
+    image: narutosimaha/flyway-langchat
+    # command: -url=jdbc:postgresql://postgres:5432/ejabberd -user=ejabberd -password=ejabberd_password -connectRetries=60 migrate
+    environment:
+      - DATABASE_NAME=langchat
+      - DATABASE_URL=jdbc:postgresql://langchat-db:5432
+      - POSTGRES_USER=langteam
+      - POSTGRES_PASSWORD=Aa1234
+    # volumes:
+    #   - ./lec-db/langchat/sql:/flyway/sql
+    depends_on:
+      - langchat-db
+    
+  langgeneral-db:
+    image: postgres:15.2
+    environment:
+      - POSTGRES_DB=langgeneral
+      - POSTGRES_USER=langteam
+      - POSTGRES_PASSWORD=Aa1234
+    ports:
+      - 5434:5432
+    volumes:
+      - pgdata1:/var/lib/postgresql/data
+    restart: always
+
+      
+  langgeneral-flyway:
+    image: narutosimaha/flyway-langgeneral
+    # command: -url=jdbc:postgresql://postgres:5432/ejabberd -user=ejabberd -password=ejabberd_password -connectRetries=60 migrate
+    environment:
+      - DATABASE_NAME=langgeneral
+      - DATABASE_URL=jdbc:postgresql://langgeneral-db:5432
+      - POSTGRES_USER=langteam
+      - POSTGRES_PASSWORD=Aa1234
+    # volumes:
+    #   - ./lec-db/langchat/sql:/flyway/sql
+    depends_on:
+      - langgeneral-db
+
+volumes:
+  pgdata:
+  pgdata1:
+
+

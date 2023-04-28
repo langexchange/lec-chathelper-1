@@ -1,0 +1,100 @@
+converse-crrform {
+    display: none;
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    min-width: 500px;
+    height: fit-content;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 999;
+    -webkit-box-shadow: 0px 2px 8px 2px rgba(0, 0, 0, 0.25);
+    box-shadow: 0px 2px 8px 2px rgba(0, 0, 0, 0.25);
+
+    form {
+        label {
+            font-weight: 400 !important;
+        }
+        code {
+            display: block;
+            border: none !important;
+            border-radius: 8px;
+            background-color: #f0f2f5 !important;
+            padding: 12px !important;
+            width: 100% !important;
+            height: fit-content !important;
+        }
+        textarea {
+            width: 100%;
+            border: none;
+            background: #f0f2f5;
+            border-radius: 8px;
+            padding: 8px 12px;
+            margin-bottom: 12px !important;
+        }
+        button {
+            float: right;
+            background: #41a8fe;
+            color: white;
+            border: none;
+            border-radius: 6px !important;
+            padding: 8px 24px;
+            box-shadow: 0 2px 0 rgba(5, 145, 255, 0.1);
+            transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+            font-weight: 400;
+            user-select: none;
+            touch-action: manipulation;
+            outline: none;
+            &:hover {
+                background: #69b1ff;
+            }
+            &:focus-within {
+                outline: 4px solid #91caff;
+                outline-offset: 1px;
+                transition: outline-offset 0s, outline 0s;
+            }
+            &:active {
+                background: #4096ff;
+            }
+        }
+    }
+}
+
+converse-crrform form {
+    width: 100%;
+    height: 100%;
+}
+
+converse-crrform #close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+    border: 1px solid #fff;
+    border-radius: 50%;
+    padding: 0 3px 2px;
+
+    &:hover {
+        border-color: #ccc;
+    }
+}
+
+.crr-input {
+}
+
+.crr-display {
+}
+
+r {
+    color: #ff4d4f;
+    background-color: #fff2f0;
+    text-decoration: line-through;
+}
+
+g {
+    color: #53c51a;
+    background-color: #f6ffec;
+}
