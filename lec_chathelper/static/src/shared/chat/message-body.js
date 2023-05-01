@@ -50,8 +50,10 @@ export default class MessageBody extends CustomElement {
             'render_styling': !this.model.get('is_unstyled') && api.settings.get('allow_message_styling'),
             'show_me_message': true,
             'is_corrected': this.model.get('is_corrected'),
+            'is_audiobot': this.model.get('is_audiobot'),
             'hide_media_urls': true,
         }
+
         if (this.hide_url_previews === "false") {
             options.embed_audio = true;
             options.embed_videos = true;

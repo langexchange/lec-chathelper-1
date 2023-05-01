@@ -78,7 +78,7 @@ converse.plugins.add('converse-correctview', {
         display_input.replaceChildren(diffText(msg_text, ev.target.value));
       })
 
-      // Write your 
+
       crrform.style.display = 'inline-block';
     }
 
@@ -118,18 +118,13 @@ converse.plugins.add('converse-correctview', {
 
 
     function transformCrrMsg(richText, options) {
+      
       if (!richText.is_corrected) return;
-
       var parser = new DOMParser();
       richText.addTemplateResult(0, richText.length, html`${parser.parseFromString(richText.toString(), 'text/html').body}`);
     }
 
     api.listen.on('getMessageActionButtons', addCorrectionOptions);
     api.listen.on('beforeMessageBodyTransformed', transformCrrMsg);
-
-
-
-   
-
   }
 });

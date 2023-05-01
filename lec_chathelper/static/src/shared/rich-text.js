@@ -99,6 +99,7 @@ export class RichText extends String {
         this.show_images = options?.show_images;
         this.hide_media_urls = options?.hide_media_urls;
         this.is_corrected = options?.is_corrected;
+        this.is_corrected = options?.is_audiobot;
     }
 
     shouldRenderMedia (url_text, type) {

@@ -45,9 +45,9 @@ else:
     whisper_model = whisper.load_model(whisper_model_name)
     faster_whisper_model = WhisperModel(faster_whisper_model_path)
 model_lock = Lock()
+
+
 ######## INIT ############
-
-
 def get_model(method: str = "openai-whisper"):
   if method == "faster-whisper":
       return faster_whisper_model

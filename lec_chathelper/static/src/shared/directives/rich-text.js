@@ -20,8 +20,6 @@ class RichTextRenderer {
         } catch (e) {
             log.error(e);
         }
-        console.log("RichText render:");
-        console.log(text);
         return text.payload;
     }
 
