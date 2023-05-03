@@ -35,7 +35,7 @@
     "lerna": "lerna bootstrap --hoist --ignore-scripts",
     "nodeps": "webpack --config webpack/webpack.nodeps.js",
     "prepare": "npm run lerna && npm run build",
-    "serve": "webpack serve --config webpack/webpack.serve.js",
+    "serve": "webpack serve --config webpack/webpack.serve.js --mode=development",
     "watch": "webpack --watch --config webpack/webpack.build.js --mode=development"
   },
   "repository": {
