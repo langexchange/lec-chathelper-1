@@ -56,10 +56,13 @@ export default class RecordToolView extends ElementView {
 
   createFileComponent(){
     const clipContainer = document.createElement("article");
+    clipContainer.style.display = "flex";
+    clipContainer.style.alignItems = "flex-end";
     const audio = document.createElement('audio');
+    audio.style.maxHeight = '22px'
     const deleteButton = document.createElement('button');
     deleteButton.textContent = "Delete";
-    deleteButton.className = 'delete';
+    deleteButton.className = 'btn btn-danger btn-sm py-0 ml-2 mt-0 delete';
     clipContainer.appendChild(audio);
     clipContainer.appendChild(deleteButton)
 
