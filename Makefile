@@ -10,7 +10,7 @@ front:
 	(cd ./lec_chathelper/static && make devserver)
 
 down:
-	docker-compose -f docker-compose-frontend.yml down
+	docker-compose -f docker-compose-frontend.yml down -v
 
 backend:
 	docker-compose -f docker-compose-frontend.yml up -d --force-recreate
