@@ -1,7 +1,7 @@
 from celery import shared_task
 import environ
 from .chatworker import ChatWorkerConsumer
-from .chatworker.handlers import *
+from .chatworker.handlers import UserUpdateHandler, FriendStateHandler
 import logging
 from celery.contrib.abortable import AbortableTask
 
@@ -14,10 +14,12 @@ count = 0
 def initConsumers(task_id):
   import threading, os
   logger.info("Chat consumer %d get initialized %s at thread %d by process %d %s", count, __name__, threading.get_ident() ,os.getpid(), "requested by task id {}".format(task_id))
+
   env = environ.Env()
   BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
   environ.Env.read_env(os.path.join(BASE_DIR,'env/.dev.env'))
   APP_BROKERS = env('APP_BROKERS')
+
   # TODO: SHOULD HAVE A UNIQUE CONFIG FILE AS IT IS LARGER
   conf = {'bootstrap.servers': APP_BROKERS,
       'group.id': "chathelper",
@@ -25,7 +27,7 @@ def initConsumers(task_id):
       'enable.auto.commit': False}  
   consumer = ChatWorkerConsumer(5,conf)
   consumer.register("chathelper-friendstate", FriendStateHandler)
-  consumer.register("chathelper-userupdate", UserUpdateHandler)
+  consumer.register("chathelper-userinfo", UserUpdateHandler)
   
   # TODO: Catch exeption from here
 

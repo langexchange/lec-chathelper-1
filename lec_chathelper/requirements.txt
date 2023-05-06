@@ -21,9 +21,10 @@ kombu==5.2.4
 confluent-kafka==1.9.2
 django-rest-swagger==2.2.0
 uritemplate==4.1.1
+lxml==4.9.2
 
 
 # ASR app
-faster-whisper==0.4.1
-torch
-openai-whisper==20230124
+# faster-whisper==0.4.1
+# torch
+# openai-whisper==20230124

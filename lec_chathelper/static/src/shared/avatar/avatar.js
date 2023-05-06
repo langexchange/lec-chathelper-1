@@ -24,8 +24,11 @@ export default class Avatar extends CustomElement {
 
     render  () {
         const image_type = this.data?.image_type || _converse.DEFAULT_IMAGE_TYPE;
-        let image;
-        if (this.data?.data_uri) {
+        let image, isExternal = false;
+        if(this.data?.image_url){
+          image = this.data?.image_url;
+          isExternal = true
+        } else if (this.data?.data_uri) {
             image = this.data?.data_uri;
         } else {
             const image_data = this.data?.image || _converse.DEFAULT_IMAGE;
@@ -37,6 +40,7 @@ export default class Avatar extends CustomElement {
             'width': this.width,
             image,
             image_type,
+            isExternal,
         });
     }
 }

@@ -108,7 +108,7 @@ INSTALLED_APPS = [
     'rest_framework',
 ]
 
-
+MIGRATION_MODULES = {'chat': 'chat.notmigrations'}
 
 DATABASE_ROUTERS = ['chat.dbrouter.ChatRouter']
 

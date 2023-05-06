@@ -8,12 +8,13 @@ const { Strophe, $iq, u } = converse.env;
 async function onVCardData (jid, iq) {
     const vcard = iq.querySelector('vCard');
     let result = {};
-    if (vcard !== null) {
+    if (vcard !== null) {     
         result = {
             'stanza': iq,
             'fullname': vcard.querySelector('FN')?.textContent,
             'nickname': vcard.querySelector('NICKNAME')?.textContent,
             'image': vcard.querySelector('PHOTO BINVAL')?.textContent,
+            'image_url': vcard.querySelector('PHOTO EXTVAL')?.textContent, //Langex added to render avatar base on url
             'image_type': vcard.querySelector('PHOTO TYPE')?.textContent,
             'url': vcard.querySelector('URL')?.textContent,
             'role': vcard.querySelector('ROLE')?.textContent,
@@ -21,6 +22,8 @@ async function onVCardData (jid, iq) {
             'vcard_updated': (new Date()).toISOString(),
             'vcard_error': undefined
         };
+        console.log("onVCardData")
+        console.log(result)
     }
     if (result.image) {
         const buffer = u.base64ToArrayBuffer(result['image']);
@@ -184,5 +187,6 @@ export async function getVCard (jid) {
             'vcard_error': (new Date()).toISOString()
         }
     }
+    console.log(iq)
     return onVCardData(jid, iq);
 }

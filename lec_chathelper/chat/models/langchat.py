@@ -1,5 +1,7 @@
 from django.db import models
 from django.db.models.constraints import UniqueConstraint
+from django.utils import timezone
+import uuid
 
 class LangChatModels:
     models = ["ChatUsers", "Rosterusers"]
@@ -13,14 +15,15 @@ class ChatUsers(models.Model):
     serverkey = models.TextField()
     salt = models.TextField()
     iterationcount = models.IntegerField()
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(default=timezone.now)
     class Meta:
         managed = False
         # db_table = 'chatusers'
         db_table = 'users'
 
 class Rosterusers(models.Model):
-    username = models.TextField(primary_key=True)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    username = models.TextField()
     jid = models.TextField()
     nick = models.TextField()
     subscription = models.CharField(max_length=1)
@@ -29,13 +32,20 @@ class Rosterusers(models.Model):
     server = models.CharField(max_length=1)
     subscribe = models.TextField()
     type = models.TextField(blank=True, null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(default=timezone.now)
 
     class Meta:
         managed = False
         db_table = 'rosterusers'
-        unique_together = (('username', 'jid'),)
 
+class Vcard(models.Model):
+    username = models.TextField(primary_key=True)
+    vcard = models.TextField()
+    created_at = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        managed = False
+        db_table = 'vcard'
     
 # This is an auto-generated Django model module.
 # You'll have to do the following manually to clean this up:
@@ -537,14 +547,7 @@ class Rosterusers(models.Model):
 #         db_table = 'sr_user'
 #         unique_together = (('jid', 'grp'),)
 
-# class Vcard(models.Model):
-#     username = models.TextField(primary_key=True)
-#     vcard = models.TextField()
-#     created_at = models.DateTimeField()
 
-#     class Meta:
-#         managed = False
-#         db_table = 'vcard'
 
 
 # class VcardSearch(models.Model):

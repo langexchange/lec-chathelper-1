@@ -24,14 +24,14 @@ def acked(err, msg):
     else:
         print("Message produced: %s" % (str(msg)))
 
-def push_friend_state():
-    with open("./mock/friendstate.json", "r") as file:
-      data_set = json.load(file)
-      for data in data_set:
-        producer.produce("chathelper-friendstate", value=json.dumps(data), callback=acked)
-        producer.poll(1)
+# def push_friend_state():
+#     with open("./mock/friendstate.json", "r") as file:
+#       data_set = json.load(file)
+#       for data in data_set:
+#         producer.produce("chathelper-friendstate", value=json.dumps(data), callback=acked)
+#         producer.poll(1)
 
-push_friend_state()
+# push_friend_state()
 
 """
 {
@@ -44,7 +44,7 @@ def push_user_update():
     with open("./mock/userupdate.json", "r") as file:
       data_set = json.load(file)
       for data in data_set:
-        producer.produce("chathelper-userupdate", value=json.dumps(data), callback=acked)
+        producer.produce("chathelper-userinfo", value=json.dumps(data), callback=acked)
         producer.poll(1)
 
 

@@ -10,7 +10,7 @@ env = environ.Env()
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 environ.Env.read_env(os.path.join(BASE_DIR,'env/.dev.env'))
 
-LOG_FILE = env("LOG_FILE")
+LOG_FILE_FROM_ROOT = env("LOG_FILE_FROM_ROOT")
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -38,7 +38,7 @@ with open(os.path.join(BASE_DIR,'chat/chatworker/conf/logging.yml'), "r") as fil
   except yaml.YAMLError as e:
     raise("Error while parsing YAML config file")
 
-config["handlers"]["file-handler"]["filename"] = LOG_FILE
+config["handlers"]["file-handler"]["filename"] = os.path.join(BASE_DIR, LOG_FILE_FROM_ROOT)
 logging.config.dictConfig(config)
 logger = logging.getLogger(__name__)
 
