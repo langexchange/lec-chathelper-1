@@ -9,6 +9,9 @@ front:
 	docker exec lec-web /etc/nginx/script.sh
 	(cd ./lec_chathelper/static && make devserver)
 
+only-front:
+	(cd ./lec_chathelper/static && make devserver)
+
 down:
 	docker-compose -f docker-compose-frontend.yml down
 
