@@ -119,8 +119,7 @@ export class ChatToolbar extends CustomElement {
                         class="fa fa-paperclip"
                         size="1em"></converse-icon>
                 </button>
-                <input type="file" class="fileupload" multiple="" style="display:none"/>`;
-                // <input type="file" @change=${this.onFileSelection} class="fileupload" multiple="" style="display:none"/>`;
+                <input type="file" @change=${this.onFileSelection} class="fileupload" multiple="" style="display:none"/>`;
 
         } else {
             return '';

@@ -16,7 +16,6 @@ export default {
          * @param {object} [attrs] An object containing configuration attributes.
          */
         async create (jids, attrs) {
-          console.log("Hellllllllllllllllllllllllllllllooooo");
             if (typeof jids === 'string') {
                 if (attrs && !attrs?.fullname) {
                     const contact = await api.contacts.get(jids);
@@ -81,7 +80,6 @@ export default {
          * });
          */
         async open (jids, attrs, force) {
-          console.log("Hellllllllllllllllllllllllllllllooooo");
             if (typeof jids === 'string') {
                 const chat = await api.chats.get(jids, attrs, true);
                 
@@ -123,7 +121,6 @@ export default {
          *
          */
         async get (jids, attrs={}, create=false) {
-          console.log("Hellllllllllllllllllllllllllllllooooo");
             await api.waitUntil('chatBoxesFetched');
 
             async function _get (jid) {

@@ -41,6 +41,12 @@ function renderContact (contact) {
         extra_classes.push(subscription);
         extra_classes.push(contact.presence.get('show'));
     }
+    console.log("renderContact")
+    console.log(`
+    <li class="list-item d-flex controlbox-padded ${extra_classes.join(' ')}" data-status="${contact.presence.get('show')}">
+        <converse-roster-contact .model=${contact}></converse-roster-contact>
+    </li>`)
+    console.log(contact)
     return html`
         <li class="list-item d-flex controlbox-padded ${extra_classes.join(' ')}" data-status="${contact.presence.get('show')}">
             <converse-roster-contact .model=${contact}></converse-roster-contact>
@@ -51,6 +57,8 @@ function renderContact (contact) {
 export default  (o) => {
     const i18n_title = __('Click to hide these contacts');
     const collapsed = _converse.roster.state.get('collapsed_groups');
+    console.log("templates/groups")
+    console.log(o.contacts)
     return html`
         <div class="roster-group" data-group="${o.name}">
             <a href="#" class="list-toggle group-toggle controlbox-padded" title="${i18n_title}" @click=${ev => toggleGroup(ev, o.name)}>

@@ -153,8 +153,6 @@ export function getOpenGraphMetadata (stanza) {
 
 
 export function getMediaURLsMetadata (text, offset=0) {
-    console.log("getMediaURLsMetadata, text:")
-    console.log(text)
     const objs = [];
     if (!text) {
         return {};
@@ -248,8 +246,6 @@ export function getErrorAttributes (stanza) {
  * @returns { Reference }
  */
 export function getReferences (stanza) {
-    console.log("getReferences:")
-    console.log(stanza)
     return sizzle(`reference[xmlns="${Strophe.NS.REFERENCE}"]`, stanza).map(ref => {
         const anchor = ref.getAttribute('anchor');
         const text = stanza.querySelector(anchor ? `#${anchor}` : 'body')?.textContent;

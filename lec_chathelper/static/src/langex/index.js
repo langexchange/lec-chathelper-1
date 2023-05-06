@@ -27,10 +27,9 @@ converse.initialize({
       // muc_show_logs_before_join: true,
       // notify_all_room_messages: ['discuss@conference.conversejs.org'],
       view_mode: 'fullscreen',
-      // websocket_url: 'ws://localhost:5280/xmpp-websocket',
-      websocket_url: 'wss://localhost/chat/xmpp/ws',
-      // websocket_url: 'wss://langexchange.giize.com/chat/ws',
-      whitelisted_plugins: ['converse-debug', 'converse-langex-chat', 'langex-audio-toolkit', 'converse-correctview'],
+      websocket_url: 'ws://localhost:5280/ws',
+      // websocket_url: 'wss://localhost',
+      whitelisted_plugins: ['converse-debug', 'converse-langex-chat', 'langex-audio-toolkit', 'converse-correctview', 'converse-langex-audiobot'],
       allow_non_roster_messaging: true,
       allow_message_corrections: false,
       render_media: true,
@@ -43,17 +42,3 @@ converse.initialize({
 
 
 
-
-// import { _converse, api, converse } from "@converse/headless/core.js";
-
-// async function onCorrectionFormSubmitted () {
-//   //Get the correction html
-//   const html = `I dont think <r>hello</r><b>guys<b></b>`
-
-//   // const model = _converse._converse.chatboxes.get('vutl@localhost');
-//   // // Send message with correct option
-//   // await model.sendMessage({'body': html, spoiler_hint, 'is_corrected':true});
-//   console.log(_converse)
-// }
-
-// Object.assign(converse, {onCorrectionFormSubmitted});

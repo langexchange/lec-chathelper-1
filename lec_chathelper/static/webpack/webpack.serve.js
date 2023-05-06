@@ -17,7 +17,7 @@ module.exports = merge(common, {
     },
     plugins: [
         new HTMLWebpackPlugin({
-            title: 'Converse.js Dev',
+            title: 'Langex App',
             template: 'webpack.html',
             filename: 'index.html'
         })

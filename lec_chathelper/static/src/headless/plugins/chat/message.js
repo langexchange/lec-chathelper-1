@@ -156,6 +156,8 @@ const MessageMixin = {
         } else if (this.vcard) {
             return this.vcard.getDisplayName();
         } else {
+            console.log("getDisplayName")
+            console.log(this)
             return this.get('from');
         }
     },

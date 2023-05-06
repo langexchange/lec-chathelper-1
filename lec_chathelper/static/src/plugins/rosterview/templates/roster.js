@@ -48,7 +48,12 @@ export default (el) => {
         <div class="list-container roster-contacts ${ is_closed ? 'hidden' : '' }">
             <converse-roster-filter @update=${() => el.requestUpdate()}></converse-roster-filter>
             ${ repeat(groupnames, (n) => n, (name) => {
+                console.log("Groupnames")
+                console.log(groupnames)
+                console.log(contacts_map)
                 const contacts = contacts_map[name].filter(c => shouldShowContact(c, name));
+                console.log("After filter:")
+                console.log(contacts)
                 contacts.sort(contactsComparator);
                 return contacts.length ? tplGroup({ contacts, name }) : '';
             }) }

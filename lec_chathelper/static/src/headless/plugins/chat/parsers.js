@@ -37,8 +37,6 @@ const { Strophe, sizzle } = converse.env;
  * @returns { (MessageAttributes|Error) }
  */
 export async function parseMessage (stanza) {
-    console.log("Message first received:")
-    console.log(stanza)
     throwErrorIfInvalidForward(stanza);
 
     let to_jid = stanza.getAttribute('to');

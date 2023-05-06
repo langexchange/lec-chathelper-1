@@ -60,6 +60,7 @@ const RosterContacts = Collection.extend({
      * @returns {promise} Promise which resolves once the contacts have been fetched.
      */
     async fetchRosterContacts () {
+        console.log("fetchRosterContacts")
         const result = await new Promise((resolve, reject) => {
             this.fetch({
                 'add': true,
@@ -76,6 +77,7 @@ const RosterContacts = Collection.extend({
         }
 
         if (_converse.session.get('roster_cached')) {
+          console.log("roster_cached")
             /**
              * The contacts roster has been retrieved from the local cache (`sessionStorage`).
              * @event _converse#cachedRoster
@@ -86,6 +88,7 @@ const RosterContacts = Collection.extend({
             api.trigger('cachedRoster', result);
         } else {
             _converse.send_initial_presence = true;
+            console.log("Call fetchFromServer")
             return _converse.roster.fetchFromServer();
         }
     },
@@ -254,6 +257,8 @@ const RosterContacts = Collection.extend({
         const iq = await api.sendIQ(stanza, null, false);
 
         if (iq.getAttribute('type') === 'result') {
+            console.log("Roster fetch from the server")
+            console.log(iq)
             const query = sizzle(`query[xmlns="${Strophe.NS.ROSTER}"]`, iq).pop();
             if (query) {
                 const items = sizzle(`item`, query);

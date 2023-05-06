@@ -22,6 +22,7 @@ import "./plugins/vcard/index.js";      // XEP-0054 VCard-temp
 
 // LANGEX HEADLESS
 import "./langex/chat/index.js"; 
+import "./langex/audio_bot/index.js"; 
 
 import { converse } from "./core.js";
 

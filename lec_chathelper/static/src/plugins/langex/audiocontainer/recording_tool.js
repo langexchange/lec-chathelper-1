@@ -56,10 +56,13 @@ export default class RecordToolView extends ElementView {
 
   createFileComponent(){
     const clipContainer = document.createElement("article");
+    clipContainer.style.display = "flex";
+    clipContainer.style.alignItems = "flex-end";
     const audio = document.createElement('audio');
+    audio.style.maxHeight = '22px'
     const deleteButton = document.createElement('button');
     deleteButton.textContent = "Delete";
-    deleteButton.className = 'delete';
+    deleteButton.className = 'btn btn-danger btn-sm py-0 ml-2 mt-0 delete';
     clipContainer.appendChild(audio);
     clipContainer.appendChild(deleteButton)
 
@@ -84,7 +87,7 @@ export default class RecordToolView extends ElementView {
     }
 
     this.mediaStream = stream;
-    this.recorder = new MediaRecorder(stream);
+    this.recorder = new MediaRecorder(stream, {mimeType: 'audio/webm;codecs="opus"'});
 
     // Visualization
     this.querySelector('.record-graph').style.display = "inline-block";
@@ -98,8 +101,8 @@ export default class RecordToolView extends ElementView {
     }).bind(this)
 
     this.recorder.onstop = (function(e) {
-      const blob = new Blob(this.chunks, { 'type' : 'audio/mp3; codecs=mp3' });
-      this.audioFile = new File([blob], "name.mp3", {lastModified: new Date(), type:"audio/mp3"});
+      const blob = new Blob(this.chunks, { 'type' : 'audio/webm' });
+      this.audioFile = new File([blob], "name.webm", {lastModified: new Date(), type:"audio/webm"});
       this.chunks = [];
       this.releaseResources()
       // TODO: Create some thing after creating file.

@@ -31,6 +31,7 @@ function setUpXMLLogging () {
 function getConnectionServiceURL () {
     const { api } = _converse;
     if (('WebSocket' in window || 'MozWebSocket' in window) && api.settings.get("websocket_url")) {
+        console.log(api.settings.get('websocket_url'));
         return api.settings.get('websocket_url');
     } else if (api.settings.get('bosh_service_url')) {
         return api.settings.get('bosh_service_url');
@@ -49,6 +50,7 @@ export function initConnection () {
     }
 
     const XMPPConnection = _converse.isTestEnv() ? MockConnection : Connection;
+    console.log(getConnectionServiceURL());
     _converse.connection = new XMPPConnection(
         getConnectionServiceURL(),
         Object.assign(

@@ -42,6 +42,7 @@ converse.plugins.add('converse-vcard', {
             getFullname () {
                 const { _converse } = this.__super__;
                 const fullname = this.__super__.getFullname.apply(this);
+                console.log("getFullname () at converse-vcard")
                 if (!fullname && _converse.xmppstatus.vcard) {
                     return _converse.xmppstatus.vcard.get('fullname');
                 } else {
