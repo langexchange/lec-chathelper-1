@@ -88,6 +88,8 @@ export default class Message extends CustomElement {
     }
 
     getProps () {
+        console.log("getProps()")
+        console.log(this.model.toJSON())
         return Object.assign(
             this.model.toJSON(),
             this.getDerivedMessageProps()

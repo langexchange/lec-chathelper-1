@@ -7,6 +7,8 @@ const { Strophe, $iq, u } = converse.env;
 
 async function onVCardData (jid, iq) {
     const vcard = iq.querySelector('vCard');
+    console.log("Vcard")
+    console.log(iq)
     let result = {};
     if (vcard !== null) {
         result = {
@@ -144,11 +146,15 @@ export async function initVCardCollection () {
             'error': resolve
         }, {'silent': true});
     });
+    console.log("initVCardCollection()")
     const vcards = _converse.vcards;
+    console.log(vcards)
     if (_converse.session) {
         const jid = _converse.session.get('bare_jid');
         const status = _converse.xmppstatus;
+        //TODO: HERE IS WHERE MAIN USER GET JID HIMSELF
         status.vcard = vcards.get(jid) || vcards.create({'jid': jid});
+        console.log("Init vcard")
         if (status.vcard) {
             status.vcard.on('change', () => status.trigger('vcard:change'));
             status.trigger('vcard:add');
@@ -173,6 +179,7 @@ export function clearVCardsSession () {
 }
 
 export async function getVCard (jid) {
+    console.log(`getVCard for ${jid}`)
     const to = Strophe.getBareJidFromJid(jid) === _converse.bare_jid ? null : jid;
     let iq;
     try {

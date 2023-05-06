@@ -73,8 +73,11 @@ const RosterContact = Model.extend({
         const nick = this.get('nickname');
         const jid = this.get('jid');
         let criteria = this.getDisplayName();
+        console.log("getFilterCriteria")
+        console.log(criteria)
         criteria = !criteria.includes(jid) ? criteria.concat(`   ${jid}`) : criteria;
         criteria = !criteria.includes(nick) ? criteria.concat(`   ${nick}`) : criteria;
+        console.log(criteria.toLowerCase())
         return criteria.toLowerCase();
     },
 
