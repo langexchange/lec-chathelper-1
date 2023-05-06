@@ -29,7 +29,7 @@ converse.plugins.add('langex-audio-toolkit', {
     // }
 
     api.listen.on('getToolbarButtons', (toolbar_el, buttons) => {
-      buttons.push(html`<langex-recording-tool></langex-recording-tool>`);
+      buttons.push(html`<langex-recording-tool class='recording-tool-container'></langex-recording-tool>`);
       return buttons;
     })   
     
