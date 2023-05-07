@@ -13,7 +13,7 @@ class UserUpdateHandler:
           "nickname": "NICKNAME",
           "avatar_url": "PHOTO EXTVAL",
           "jid": "JABBERID",
-        }
+    }
     vcardns = 'vcard-temp'
     vcard_el = 'vCard'
     
@@ -34,7 +34,7 @@ class UserUpdateHandler:
 
       for field in data:
         if field not in UserUpdateHandler.vcardElMapping:
-          logger.warning("Field {} is supported to add in chat app", field)
+          logger.warning("Field {} is supported to add in chat app".format(field))
           continue
         
         cur_element = root

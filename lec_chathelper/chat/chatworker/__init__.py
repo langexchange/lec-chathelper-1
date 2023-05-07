@@ -1,5 +1,6 @@
 
 from confluent_kafka import Consumer, KafkaError, KafkaException
+from confluent_kafka.admin import AdminClient, NewTopic
 import sys
 import logging
 from celery.contrib.abortable import AbortableAsyncResult
@@ -14,19 +15,38 @@ class ChatWorkerConsumer:
         self.handlers = {}
 
     def register(self, topicName, handlerInstance):
-        self.handlers[topicName] = handlerInstance
+      self.handlers[topicName] = handlerInstance
 
     def callHandler(self, message):
-        topicName = message.topic()
-        if topicName not in self.handlers:
-          logger.error('There is no handler for this {}'.format(topicName))
-        logger.info('Call handler {} for msg {}'.format(self.handlers[topicName], message.value()))
-        self.handlers[topicName].handle(message)
+      topicName = message.topic()
+      if topicName not in self.handlers:
+        logger.error('There is no handler for this {}'.format(topicName))
+      logger.info('Call handler {} for msg {}'.format(self.handlers[topicName], message.value()))
+      self.handlers[topicName].handle(message)
     
+    def createTopicsIfNotExists(self, num_partitions=1, replication_factor=1):
+      admin_client = AdminClient({'bootstrap.servers': self.conf["bootstrap.servers"]})
+      topic_metadata = admin_client.list_topics(timeout = 5)
+
+      new_topics = []
+      for topic in self.handlers:
+        if topic not in topic_metadata.topics:
+          new_topic = NewTopic(topic=topic, num_partitions=num_partitions, replication_factor=replication_factor)
+          new_topics.append(new_topic)
+          logger.debug("Create topic {} with num_partitions {} and replication_factor {}".format(topic, num_partitions, replication_factor))
+        else:
+          logger.debug("Topic {} already exists".format(topic))
+
+      if not new_topics:
+        return
+      
+      admin_client.create_topics(new_topics)
+
     def initPullLoop(self, task_id):
       logger.debug('initPullLoop get call by {}'.format(ChatWorkerConsumer.__name__))
       try:
         logger.debug('Before subscribe topics')
+        self.createTopicsIfNotExists(num_partitions=1, replication_factor=1)
         self.consumer.subscribe(list(self.handlers.keys()))
         logger.debug('After subscribe topics')
         msg_count = 0

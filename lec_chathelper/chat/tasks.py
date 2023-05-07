@@ -22,8 +22,8 @@ def initConsumers(task_id):
 
   # TODO: SHOULD HAVE A UNIQUE CONFIG FILE AS IT IS LARGER
   conf = {'bootstrap.servers': APP_BROKERS,
-      'group.id': "chathelper",
-      'auto.offset.reset': 'latest',
+      'group.id': "chathelper1",
+      'auto.offset.reset': 'earliest',
       'enable.auto.commit': False}  
   consumer = ChatWorkerConsumer(5,conf)
   consumer.register("chathelper-friendstate", FriendStateHandler)

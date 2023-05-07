@@ -63,7 +63,6 @@ services:
   
   zookeeper:
     image: confluentinc/cp-zookeeper:7.3.2
-    container_name: zookeeper
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
@@ -81,7 +80,6 @@ services:
   #   2. Friend relationship update: friend and unfriend.
   kafka:
     image: confluentinc/cp-kafka:7.3.2
-    container_name: broker
     ports:
     # To learn about configuring Kafka for access across networks see
     # https://www.confluent.io/blog/kafka-client-cannot-connect-to-broker-on-aws-on-docker-etc/
@@ -126,16 +124,12 @@ services:
     image: consul:${TAG:-latest}
     command: consul agent -dev -log-level=warn -ui -client=0.0.0.0
     hostname: consul
-    container_name: le-consul
-    # networks:
-    #     - lang-exchange-network
     restart: always
     ports:
     - "8500:8500"
 
   le-file-service:
     image: thuongnguyen158/le-file-service:latest
-    container_name: file-service
     environment:
       ASPNETCORE_ENVIRONMENT: Development
       S3_BUCKET_NAME: language-exchanged
@@ -153,7 +147,6 @@ services:
   # access url to see http://localhost:5002/swagger/index.html
   le-user-service:
     image: thuongnguyen158/le-user-service:latest
-    container_name: user-service
     environment:
       ASPNETCORE_ENVIRONMENT: Development
       CONSUL_URL: http://consul:8500
@@ -161,8 +154,6 @@ services:
       SECRET_KEY: 'aAa01234567890aAa'
       NEO4J_DATABASE: neo4j
       NEO4J_HOST: bolt://54.151.158.181:7687
-        #localhost neo4j
-        # NEO4J_HOST: bolt://localhost:7687
       NEO4J_USER: neo4j
       NEO4J_PASSWORD: t0ps3cr3tt0ps3cr3t
       CHAT_DOMAIN: localhost
@@ -176,7 +167,6 @@ services:
     ports:
       - "5002:80"
 
-  
 
 volumes:
   pgdata:
