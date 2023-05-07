@@ -33,14 +33,21 @@ class ChatWorkerConsumer:
         if topic not in topic_metadata.topics:
           new_topic = NewTopic(topic=topic, num_partitions=num_partitions, replication_factor=replication_factor)
           new_topics.append(new_topic)
-          logger.debug("Create topic {} with num_partitions {} and replication_factor {}".format(topic, num_partitions, replication_factor))
+
         else:
           logger.debug("Topic {} already exists".format(topic))
 
       if not new_topics:
         return
-      
-      admin_client.create_topics(new_topics)
+
+      futures = admin_client.create_topics(new_topics)
+      for topic_name in futures:
+        try:
+          futures[topic_name].result()
+          logger.debug("Create topic {} with num_partitions {} and replication_factor {}".format(topic_name, num_partitions, replication_factor))
+        except Exception as e:
+          logger.warn("Failed to create topic{}".format(topic_name))
+
 
     def initPullLoop(self, task_id):
       logger.debug('initPullLoop get call by {}'.format(ChatWorkerConsumer.__name__))
