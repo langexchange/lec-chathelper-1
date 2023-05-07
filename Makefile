@@ -7,10 +7,10 @@ build:
 front:
 	docker-compose -f docker-compose-frontend.yml up -d --force-recreate --remove-orphans
 	docker exec lec-web /etc/nginx/script.sh
-	(cd ./lec_chathelper/static && make devserver)
+	(cd ./lec_chatfront && make devserver)
 
 only-front:
-	(cd ./lec_chathelper/static && make devserver)
+	(cd ./lec_chatfront && make devserver)
 
 down:
 	docker-compose -f docker-compose-frontend.yml down -v

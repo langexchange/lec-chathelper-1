@@ -134,10 +134,9 @@ services:
       - CELERY_BROKER_URL=redis://celery-broker:6379/1
       - XMPP_WS_PORT=5280
       - XMPP_WS_HOST=lec-chatserver
-      - LOG_FILE=/usr/local/src/lec_chathelper/chat/chatworker/logs/worker.log
+      - LOG_FILE_FROM_ROOT=chat/chatworker/logs/worker.log
     ports:
-      - "8082:443"
-      # - "443:443"
+      - "8082:80"
     volumes:
       - ./conf/hello.conf:/usr/local/apache2/conf/httpd.conf:ro
       - ./lec_chathelper:/usr/local/src/lec_chathelper
@@ -146,18 +145,18 @@ services:
       # - ./public-html/:/usr/local/apache2/htdocs/
       - ./logs:/usr/local/apache2/logs
 
-  lec-chatbot:
-    image: narutosimaha/lec-chatbot
-    command: ["python", "main.py", "-d"]
-    environment: 
-      - MODEL_NAME=tiny.en
-      - BOT_PASSWORD=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2ODc4NzIxMTYsImlhdCI6MTY3Nzg2NzMxNywidW5hbWUiOiJjaGF0Ym90In0.P9Tha-h3BoRi6rZq3HW2oVTErRg8CETezwZKjy3gquA
-      - BOT_JID=chatbot@localhost
-      - LANGEX_XMPP_HOSTNAME=lec-chatserver
-      - LANGEX_XMPP_PORT=5222
-    volumes:
-      - ./whisper_langex/models/faster_whisper:/usr/local/src/whisper_langex/models/faster_whisper
-      - ./whisper_langex/models/whisper:/usr/local/src/whisper_langex/models/whisper   
+  # lec-chatbot:
+  #   image: narutosimaha/lec-chatbot
+  #   command: ["python", "main.py", "-d"]
+  #   environment: 
+  #     - MODEL_NAME=tiny.en
+  #     - BOT_PASSWORD=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2ODc4NzIxMTYsImlhdCI6MTY3Nzg2NzMxNywidW5hbWUiOiJjaGF0Ym90In0.P9Tha-h3BoRi6rZq3HW2oVTErRg8CETezwZKjy3gquA
+  #     - BOT_JID=chatbot@localhost
+  #     - LANGEX_XMPP_HOSTNAME=lec-chatserver
+  #     - LANGEX_XMPP_PORT=5222
+  #   volumes:
+  #     - ./whisper_langex/models/faster_whisper:/usr/local/src/whisper_langex/models/faster_whisper
+  #     - ./whisper_langex/models/whisper:/usr/local/src/whisper_langex/models/whisper   
 
 volumes:
   pgdata:

@@ -75,15 +75,18 @@ RUN pip3 install --upgrade pip
 
 ## Build dependencies for application
 COPY --chown=:langchat ./lec_chathelper /usr/local/src/lec_chathelper
+COPY --chown=:langchat ./lec_chatfront/dist /usr/local/src/lec_chatfront/dist
 RUN pip3 install -r /usr/local/src/lec_chathelper/requirements.txt
 WORKDIR /usr/local/apache2
 
 ## CELERY CONFIG
-COPY ./lec_chathelper/chat/chatworker/conf/celeryd.default /etc/default/celeryd
-COPY ./lec_chathelper/chat/chatworker/conf/celeryd.init /etc/init.d/celeryd
+COPY --chown=:langchat ./lec_chathelper/chat/chatworker/conf/celeryd.default /etc/default/celeryd
+RUN chmod 640 /etc/default/celeryd
+COPY --chown=:langchat ./lec_chathelper/chat/chatworker/conf/celeryd.init /etc/init.d/celeryd
 RUN mkdir -p /var/run/celery /var/log/celery
 RUN chown langchat:langchat /var/run/celery /var/log/celery
-RUN chmod 701 /root 
+RUN chmod 701 /root
+
 
 COPY --chown=:langweb ./conf/hello.conf /usr/local/apache2/conf/httpd.conf
 
