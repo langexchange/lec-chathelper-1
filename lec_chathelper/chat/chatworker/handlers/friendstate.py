@@ -1,8 +1,13 @@
 from chat.models.langchat import Rosterusers
 import json
 import logging
+import environ
 
 logger = logging.getLogger(__name__)
+
+env = environ.Env()
+LANGCHAT_HOST = env('LANGCHAT_HOST')
+
 
 class FriendStateHandler:
     def __init__(self):
@@ -21,6 +26,23 @@ class FriendStateHandler:
       },
       
     """
+
+    def addFriendRelationship(user1_name, user2_name):
+      user_contact1 = Rosterusers(username = user1_name, jid="{}@{}".format(user2_name, LANGCHAT_HOST), type= "item", subscription= "B")
+      user_contact2 = Rosterusers(username = user2_name, jid="{}@{}".format(user1_name, LANGCHAT_HOST), type= "item", subscription= "B")
+      user_contact1.save()
+      user_contact2.save()
+      logger.debug("New contacts is added to 2 user's roster %s %s", user1_name, user2_name)
+    
+    def removeRelationShip(user1_name, user2_name):
+      try:
+        Rosterusers.objects.filter(username = user1_name, jid="{}@{}".format(user2_name, LANGCHAT_HOST)).delete()
+        Rosterusers.objects.filter(username = user2_name, jid="{}@{}".format(user1_name, LANGCHAT_HOST)).delete()
+        logger.debug("Remove relationship between %s %s successfully", user1_name, user2_name)
+      except Exception as e:
+        logger.exception("Fail to remove relationship between %s %s %s", user1_name, user2_name, e)
+        raise("Fail to remove relationship between %s %s %s", user1_name, user2_name, e)
+      
     def handle(msg):
       logger.debug("Message %s is received by %s", msg.value(),  FriendStateHandler.__name__)
       try:
@@ -33,30 +55,15 @@ class FriendStateHandler:
       if "jid1" not in data or "jid2" not in data or "state" not in data:
          return 
       
-      user1_name = data["jid1"].split("@")[0]
-      user2_name = data["jid2"].split("@")[0]
 
       # We filter and update instead of using save as Django does not provide save() method for composite key
-
+      user1_name = data["jid1"].split("@")[0]
+      user2_name = data["jid2"].split("@")[0]
       user_contact =  Rosterusers.objects.filter(username = user1_name, jid=data["jid2"])  
-
-      if not user_contact:
-        user_contact1 = Rosterusers(username = user1_name, jid=data["jid2"], type= "item", subscription= "B" if data["state"] == "friend" else "N")
-        user_contact2 = Rosterusers(username = user2_name, jid=data["jid1"], type= "item", subscription= "B" if data["state"] == "friend" else "N")
-        user_contact1.save()
-        user_contact2.save()
-        logger.debug("New contacts is added to 2 user's roster %s %s", user1_name, user2_name)
+      if not user_contact and data["state"]=="friend":
+        FriendStateHandler.addFriendRelationship(user1_name, user2_name)
         return
-      
-      
-      try: 
-        logger.debug("Update rosteruser table...")
-        Rosterusers.objects.filter(username = user1_name, jid=data["jid2"]).update(type= "item", subscription= "B" if data["state"] == "friend" else "N")
-
-        Rosterusers.objects.filter(username = user2_name, jid=data["jid1"]).update(type= "item", subscription= "B" if data["state"] == "friend" else "N")
-      except Exception as e:
-        logger.exception("Fail to update record %s %s", msg.topic(), type(e))
-        raise('Fail to update record {}'.format(msg.topic()))
-
-      logger.info("Message %s is  successfully processed by %s", msg.value(),  FriendStateHandler.__name__)
-        
+      if data["state"]=="unfriend":
+        FriendStateHandler.removeRelationShip(user1_name, user2_name)
+        return
+      logger.warning("We do not update old existing relationship...")

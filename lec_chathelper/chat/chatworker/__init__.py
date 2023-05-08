@@ -46,7 +46,7 @@ class ChatWorkerConsumer:
           futures[topic_name].result()
           logger.debug("Create topic {} with num_partitions {} and replication_factor {}".format(topic_name, num_partitions, replication_factor))
         except Exception as e:
-          logger.warn("Failed to create topic{}".format(topic_name))
+          logger.warn("Failed to create topic {}: {}".format(topic_name, e))
 
 
     def initPullLoop(self, task_id):
