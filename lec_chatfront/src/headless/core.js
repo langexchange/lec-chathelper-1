@@ -609,6 +609,9 @@ Object.assign(converse, {
         }
     },
 
+    // Log out for langexchange
+    logout: api.user.logout,
+
     /**
      * Exposes methods for adding and removing plugins. You'll need to write a plugin
      * if you want to have access to the private API methods defined further down below.

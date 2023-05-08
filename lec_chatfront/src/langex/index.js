@@ -24,7 +24,7 @@ converse.initialize({
       // muc_respect_autojoin: true,
       // muc_show_logs_before_join: true,
       // notify_all_room_messages: ['discuss@conference.conversejs.org'],
-      view_mode: 'overlayed',
+      view_mode: 'fullscreen',
       websocket_url: 'ws://localhost:5280/ws',
       // websocket_url: 'wss://localhost',
       whitelisted_plugins: ['converse-debug', 'converse-langex-chat', 'langex-audio-toolkit', 'converse-correctview', 'converse-langex-audiobot'],
