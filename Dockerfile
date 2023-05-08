@@ -75,7 +75,6 @@ RUN pip3 install --upgrade pip
 
 ## Build dependencies for application
 COPY --chown=:langchat ./lec_chathelper /usr/local/src/lec_chathelper
-COPY --chown=:langchat ./lec_chatfront/dist /usr/local/src/lec_chatfront/dist
 RUN pip3 install -r /usr/local/src/lec_chathelper/requirements.txt
 WORKDIR /usr/local/apache2
 
