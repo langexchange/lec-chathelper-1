@@ -20,6 +20,7 @@ from django.views.generic import TemplateView
 
 open_url = [
   # path('stt/', include('stt_interface.api.urls')),
+  path('', include('django_prometheus.urls')),
 ]
 
 private_url = [

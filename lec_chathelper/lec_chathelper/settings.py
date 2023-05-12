@@ -33,7 +33,7 @@ CELERY_BROKER_URL = env("CELERY_BROKER_URL")
 ## DATABASEs
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
+        'ENGINE': 'django_prometheus.db.backends.postgresql',
         'HOST': LANGCHAT_DB_HOST,
         'NAME': LANGCHAT_DB, 
         'USER': LANGCHAT_USER,
@@ -42,7 +42,7 @@ DATABASES = {
     },
 
     'langgeneral': {
-        'ENGINE': 'django.db.backends.postgresql',
+        'ENGINE': 'django_prometheus.db.backends.postgresql',
         'HOST': LANGGENERAL_DB_HOST,
         'NAME': LANGGENERAL_DB, 
         'USER': LANGGENERAL_USER,
@@ -106,6 +106,7 @@ INSTALLED_APPS = [
     'chat.apps.ChatConfig',
     'stt_interface.apps.SttInterfaceConfig',
     'rest_framework',
+    'django_prometheus',
 ]
 
 MIGRATION_MODULES = {'chat': 'chat.notmigrations'}
@@ -140,6 +141,7 @@ DEBUG = False
 
 
 MIDDLEWARE = [
+    'django_prometheus.middleware.PrometheusBeforeMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -147,6 +149,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django_prometheus.middleware.PrometheusAfterMiddleware',
 ]
 
 ROOT_URLCONF = 'lec_chathelper.urls'
