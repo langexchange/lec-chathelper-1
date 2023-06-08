@@ -22,5 +22,25 @@
     "jid": "321@localhost",
     "nickname": "Vu dep trai",
     "avatar_url": "https://bountycdn.azureedge.net/~/media/b9bedc08353044c5b7e354858f0c4db1.ashx?la=en"
+  },
+  {
+    "jid": "d5a7dde3-94b5-44a7-bd1c-2fc8b81a2ccf@localhost",
+    "fullname": "Tân Đ.Như Van",
+    "is_created": true,
+    "target_langs": [
+       "EN"
+    ],
+    "native_lang": "VI",
+    "MessageId": "c248bacf-3658-4ad2-bb30-e8928f41efab",
+    "MessageName": "chathelper-userinfo",
+    "CreatedAt": "2023-05-18T15:10:18.0260553Z"
+ },
+  {  
+    "jid":"3dbe7b0a-ffef-46fe-9157-0c93d463484b@localhost",
+    "avatar_url":"https://language-exchanged.s3.ap-southeast-1.amazonaws.com/image/000/000/028/20230607093509/Jennie.jpg",
+    "is_created":false,"target_langs":[],
+    "MessageId":"f1c228f2-9eb1-41ad-807d-9f98e9af3a3d",
+    "MessageName":"chathelper-userinfo",
+    "CreatedAt":"2023-06-07T09:35:13.3231803Z"
   }
 ]

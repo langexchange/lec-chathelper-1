@@ -3,10 +3,8 @@ import environ
 import os 
 
 env = environ.Env()
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = Path(__file__).resolve().parent.parent
 environ.Env.read_env(os.path.join(BASE_DIR,'env/.dev.env'))
-
-
 
 
 ######### LANGEXCHANGE CUSTOM CONFIGURATION #########
@@ -104,7 +102,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'chat.apps.ChatConfig',
-    'stt_interface.apps.SttInterfaceConfig',
     'rest_framework',
     'django_prometheus',
 ]
@@ -114,7 +111,7 @@ MIGRATION_MODULES = {'chat': 'chat.notmigrations'}
 DATABASE_ROUTERS = ['chat.dbrouter.ChatRouter']
 
 # TESTING
-# TEST_RUNNER = 'chat.utils.ManagedModelTestRunner'
+TEST_RUNNER = 'lec_chathelper.test_runner.ExampleTestRunner'
 ######### END LANGEXCHANGE CUSTOM CONFIGURATION #########
 #####################################################
 
@@ -122,7 +119,7 @@ DATABASE_ROUTERS = ['chat.dbrouter.ChatRouter']
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+
 
 
 # Quick-start development settings - unsuitable for production
@@ -137,7 +134,6 @@ SECRET_KEY_FALLBACKS = [
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = True
 DEBUG = False
-
 
 
 MIDDLEWARE = [

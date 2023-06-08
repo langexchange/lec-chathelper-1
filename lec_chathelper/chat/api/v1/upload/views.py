@@ -12,11 +12,10 @@ import environ
 import boto3
 from botocore.exceptions import ClientError
 import mimetypes
-
+from lec_chathelper.settings import BASE_DIR
 
 env = environ.Env()
 # TODO: Modify this using sys.path
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))))
 environ.Env.read_env(os.path.join(BASE_DIR,'env/.dev.env'))
 
 

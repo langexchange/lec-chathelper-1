@@ -4,6 +4,7 @@ from .chatworker import ChatWorkerConsumer
 from .chatworker.handlers import UserUpdateHandler, FriendStateHandler
 import logging
 from celery.contrib.abortable import AbortableTask
+from lec_chathelper.settings import BASE_DIR
 
 # logger = get_task_logger(__name__)
   
@@ -16,7 +17,6 @@ def initConsumers(task_id):
   logger.info("Chat consumer %d get initialized %s at thread %d by process %d %s", count, __name__, threading.get_ident() ,os.getpid(), "requested by task id {}".format(task_id))
 
   env = environ.Env()
-  BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
   environ.Env.read_env(os.path.join(BASE_DIR,'env/.dev.env'))
   APP_BROKERS = env('APP_BROKERS')
 

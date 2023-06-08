@@ -5,14 +5,12 @@ import logging.config
 import yaml
 import environ
 import os 
-
+from lec_chathelper.settings import BASE_DIR
 env = environ.Env()
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 environ.Env.read_env(os.path.join(BASE_DIR,'env/.dev.env'))
 
 LOG_FILE_FROM_ROOT = env("LOG_FILE_FROM_ROOT")
-
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Set the default Django settings module for the 'celery' program.
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'lec_chathelper.settings')

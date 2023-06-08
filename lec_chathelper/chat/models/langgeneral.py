@@ -24,6 +24,7 @@ class Notibox(models.Model):
         app_label = "chat"
         db_table = 'notibox'
 
+
 class Users(models.Model):
     userid = models.UUIDField(primary_key=True)
     longtt = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True)

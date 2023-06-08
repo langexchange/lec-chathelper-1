@@ -34,6 +34,7 @@ class FriendStateHandler:
       user_contact2.save()
       logger.debug("New contacts is added to 2 user's roster %s %s", user1_name, user2_name)
     
+
     def removeRelationShip(user1_name, user2_name):
       try:
         Rosterusers.objects.filter(username = user1_name, jid="{}@{}".format(user2_name, LANGCHAT_HOST)).delete()
@@ -42,6 +43,7 @@ class FriendStateHandler:
       except Exception as e:
         logger.exception("Fail to remove relationship between %s %s %s", user1_name, user2_name, e)
         raise("Fail to remove relationship between %s %s %s", user1_name, user2_name, e)
+      
       
     def handle(msg):
       logger.debug("Message %s is received by %s", msg.value(),  FriendStateHandler.__name__)

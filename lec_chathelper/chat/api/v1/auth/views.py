@@ -4,7 +4,7 @@ import os
 import environ
 import time
 from chat.models.langgeneral import Users
-
+from lec_chathelper.settings import BASE_DIR
 # Token ASE decrypt
 from base64 import b64decode
 from Cryptodome.Cipher import AES
@@ -14,7 +14,6 @@ from Cryptodome.Util.Padding import  unpad
 ## Read environment variables
 env = environ.Env()
 # TODO: Modify this using sys.path
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))))
 environ.Env.read_env(os.path.join(BASE_DIR,'env/.dev.env'))
 
 ### GLOBAL VARIABLE

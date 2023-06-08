@@ -12,6 +12,7 @@ class ChatRouter:
                 return model_collection.db_name
         return None
 
+
     def db_for_write(self, model, **hints):
         """
         Attempts to write auth and contenttypes models go to auth_db.
@@ -29,6 +30,7 @@ class ChatRouter:
             return True
       return False
     
+
     def allow_relation(self, obj1, obj2, **hints):
         """
         Allow relations if a model in the auth or contenttypes apps is
@@ -42,6 +44,7 @@ class ChatRouter:
           return True
         
         return None
+
 
     def allow_migrate(self, db, app_label, model_name=None, **hints):
         """

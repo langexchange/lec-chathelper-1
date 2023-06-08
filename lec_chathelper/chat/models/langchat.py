@@ -7,8 +7,6 @@ class LangChatModels:
     models = ["ChatUsers", "Rosterusers"]
     db_name = "default"
 
-
-
 class ChatUsers(models.Model):
     username = models.TextField(primary_key=True)
     password = models.TextField()
@@ -20,6 +18,7 @@ class ChatUsers(models.Model):
         managed = False
         # db_table = 'chatusers'
         db_table = 'users'
+        
 
 class Rosterusers(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

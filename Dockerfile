@@ -69,13 +69,13 @@ RUN ./configure --with-python=/usr/local/bin/python3 \
     && make clean
 
 # Update pip3
-RUN pip3 install --upgrade pip
+RUN pip3 install --no-cache-dir --upgrade pip
 
 
 
 ## Build dependencies for application
 COPY --chown=:langchat ./lec_chathelper /usr/local/src/lec_chathelper
-RUN pip3 install -r /usr/local/src/lec_chathelper/requirements.txt
+RUN pip3 install --no-cache-dir -r /usr/local/src/lec_chathelper/requirements.txt
 WORKDIR /usr/local/apache2
 
 ## CELERY CONFIG
